@@ -32,9 +32,10 @@ process RNABLOOM_ASSEMBLE {
 
     script:
     """
+    export JAVA_TOOL_OPTIONS="-Xmx200g"
     mkdir -p rnabloom_output
 
-    java -Xmx200g -jar RNA-Bloom.jar \\
+    rnabloom \\
         -pool ${reads_list} \\
         -revcomp-right \\
         -t ${task.cpus} \\
