@@ -2,6 +2,7 @@
 
 nextflow.enable.dsl=2
 
+params.reads = null
 params.transcripts = null
 params.genomes = null // Allow passing a file list via --genomes (optional)
 params.database_dir = null // If provided, skip database setup and use existing database
@@ -13,6 +14,34 @@ params.species = "Ascomycota"
 params.buscodb = 'fungi'
 params.organism = 'fungus'
 params.ploidy = 1
+
+process RNABLOOM_ASSEMBLE {
+
+    tag "rnabloom_assembly"
+    publishDir "results/rnabloom", mode: 'copy'
+    
+    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
+        'https://depot.galaxyproject.org/singularity/rnabloom:2.0.0--hdfd78af_0':
+        'quay.io/biocontainers/rnabloom:2.0.0--hdfd78af_0' }"
+
+    input:
+    path reads_list
+
+    output:
+    path "rnabloom_output/rnabloom.transcripts.fa", emit: transcripts
+
+    script:
+    """
+    mkdir -p rnabloom_output
+
+    rnabloom \\
+        -pool ${reads_list} \\
+        -revcomp-right \\
+        -t ${task.cpus} \\
+        -outdir rnabloom_output \\
+	-fpr 0.01
+    """
+}
 
 process FUNANNOTATE_SETUP_DB {
 
@@ -194,11 +223,22 @@ process FUNANNOTATE_ANNOTATE {
 
 workflow {
 
-    if (!params.transcripts) {
-        error "You must provide --transcripts <transcript.fa>"
+    // Conditional transcript handling
+    if (params.reads) {
+        
+        // Create reads list channel
+        reads_ch = Channel.fromPath(params.reads)        
+        RNABLOOM_ASSEMBLE(reads_ch)
+        transcript_fasta = RNABLOOM_ASSEMBLE.out.transcripts
+        
+    } else if (params.transcripts) {
+        // Use provided transcript file
+        println "[INFO] Using provided transcript file: ${params.transcripts}"
+        transcript_fasta = Channel.fromPath(params.transcripts)
+        
+    } else {
+        error "You must provide either --reads <reads.tsv> or --transcripts <transcript.fa>"
     }
-
-    transcript_fasta = Channel.fromPath(params.transcripts)
 
     // Conditional database setup
     if (params.database_dir) {
@@ -226,13 +266,12 @@ workflow {
 
     // Run gene prediction
     FUNANNOTATE_PREDICT(FUNANNOTATE_CLEAN.out.cleaned_results,
-			transcript_fasta.first(),
-			database_ch)
+                        transcript_fasta.first(),
+                        database_ch)
     
     // Run functional annotation
     FUNANNOTATE_ANNOTATE(FUNANNOTATE_PREDICT.out.predict_results, 
-			FUNANNOTATE_PREDICT.out.genome,
-			FUNANNOTATE_PREDICT.out.annotations,
-			database_ch)
-
+                        FUNANNOTATE_PREDICT.out.genome,
+                        FUNANNOTATE_PREDICT.out.annotations,
+                        database_ch)
 }

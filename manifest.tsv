@@ -1,0 +1,10 @@
+#name	left	right
+T3_rep1	/scratch/pawsey1142/kgagalova/norin-cadenza/pathogen-genome/genome-anno/reads/HPR181_S101_L003_filt_R1.fastq	/scratch/pawsey1142/kgagalova/norin-cadenza/pathogen-genome/genome-anno/reads/HPR181_S101_L003_filt_R2.fastq
+T3_rep2	/scratch/pawsey1142/kgagalova/norin-cadenza/pathogen-genome/genome-anno/reads/HPR182_S102_L003_filt_R1.fastq	/scratch/pawsey1142/kgagalova/norin-cadenza/pathogen-genome/genome-anno/reads/HPR182_S102_L003_filt_R2.fastq
+T3_rep3	/scratch/pawsey1142/kgagalova/norin-cadenza/pathogen-genome/genome-anno/reads/HPR183_S103_L003_filt_R1.fastq	/scratch/pawsey1142/kgagalova/norin-cadenza/pathogen-genome/genome-anno/reads/HPR183_S103_L003_filt_R2.fastq
+T5_rep1	/scratch/pawsey1142/kgagalova/norin-cadenza/pathogen-genome/genome-anno/reads/HPR221_S100_L003_filt_R1.fastq	/scratch/pawsey1142/kgagalova/norin-cadenza/pathogen-genome/genome-anno/reads/HPR221_S100_L003_filt_R2.fastq
+T5_rep2	/scratch/pawsey1142/kgagalova/norin-cadenza/pathogen-genome/genome-anno/reads/HPR222_S81_L003_filt_R1.fastq	/scratch/pawsey1142/kgagalova/norin-cadenza/pathogen-genome/genome-anno/reads/HPR222_S81_L003_filt_R2.fastq
+T5_rep3	/scratch/pawsey1142/kgagalova/norin-cadenza/pathogen-genome/genome-anno/reads/HPR223_S82_L003_filt_R1.fastq	/scratch/pawsey1142/kgagalova/norin-cadenza/pathogen-genome/genome-anno/reads/HPR223_S82_L003_filt_R2.fastq
+3dpi_rep1	/scratch/pawsey1142/kgagalova/norin-cadenza/pathogen-genome/genome-anno/reads/HPR301_S77_L002_filt_R1.fastq	/scratch/pawsey1142/kgagalova/norin-cadenza/pathogen-genome/genome-anno/reads/HPR301_S77_L002_filt_R2.fastq
+3dpi_rep2	/scratch/pawsey1142/kgagalova/norin-cadenza/pathogen-genome/genome-anno/reads/HPR302_S78_L002_filt_R1.fastq	/scratch/pawsey1142/kgagalova/norin-cadenza/pathogen-genome/genome-anno/reads/HPR302_S78_L002_filt_R2.fastq
+3dpi_rep3	/scratch/pawsey1142/kgagalova/norin-cadenza/pathogen-genome/genome-anno/reads/HPR303_S67_L002_filt_R1.fastq	/scratch/pawsey1142/kgagalova/norin-cadenza/pathogen-genome/genome-anno/reads/HPR303_S67_L002_filt_R2.fastq
