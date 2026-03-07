@@ -34,7 +34,7 @@ process RNABLOOM_ASSEMBLE {
     """
     mkdir -p rnabloom_output
 
-    rnabloom \\
+    java -Xmx200g -jar RNA-Bloom.jar \\
         -pool ${reads_list} \\
         -revcomp-right \\
         -t ${task.cpus} \\
@@ -49,8 +49,8 @@ process FUNANNOTATE_SETUP_DB {
     publishDir "funannotate_db_new", mode: 'copy'
     
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'nextgenusfs/funannotate:v1.8.15':
-        'https://depot.galaxyproject.org/singularity/funannotate:1.8.15--pyhdfd78af_2' }"
+        'nextgenusfs/funannotate:v1.8.17':
+        'https://depot.galaxyproject.org/singularity/funannotate:1.8.17--pyhdfd78af_5' }"
 
     output:
     path "funannotate_db", emit: database
@@ -58,26 +58,22 @@ process FUNANNOTATE_SETUP_DB {
     script:
     """
     # Set the database environment variable
-    export FUNANNOTATE_DB=\$PWD/funannotate_db
+    export FUNANNOTATE_DB=funannotate_db
     
     # Create database directory
     mkdir -p funannotate_db
     
     # Download and setup all funannotate databases
-    echo "[INFO] Setting up core funannotate databases..."
-    funannotate setup -d funannotate_db -i all --force
+    funannotate setup -w -d funannotate_db -i all --force
     
     # Specifically install the fungi BUSCO database
-    echo "[INFO] Installing fungi BUSCO database..."
-    funannotate setup -d funannotate_db -b fungi --force
+    funannotate setup -w -d funannotate_db -b fungi --force
     
     # Also install other common BUSCO databases that might be useful
-    echo "[INFO] Installing additional BUSCO databases..."
-    funannotate setup -d funannotate_db -b eukaryota --force
-    funannotate setup -d funannotate_db -b ascomycota --force
+    funannotate setup -w -d funannotate_db -b eukaryota --force
+    funannotate setup -w -d funannotate_db -b ascomycota --force
     
     # Verify database installation
-    echo "[INFO] Verifying database installation..."
     funannotate database
     """
 }
@@ -88,8 +84,8 @@ process FUNANNOTATE_PREDICT {
     publishDir "results/funannotate/${sample_id}/predict", mode: 'copy'
     
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'nextgenusfs/funannotate:v1.8.15':
-        'https://depot.galaxyproject.org/singularity/funannotate:1.8.15--pyhdfd78af_2' }"
+        'nextgenusfs/funannotate:v1.8.17':
+        'https://depot.galaxyproject.org/singularity/funannotate:1.8.17--pyhdfd78af_5' }"
 
     input:
     tuple val(sample_id), path(genome_fasta)
@@ -107,7 +103,6 @@ process FUNANNOTATE_PREDICT {
     export FUNANNOTATE_DB=${database}
     
     # Verify BUSCO database is available
-    echo "[INFO] Checking BUSCO database availability..."
     funannotate database
     
     # Check if fungi database exists
@@ -137,8 +132,8 @@ process FUNANNOTATE_CLEAN {
     publishDir "results/funannotate/${sample_id}/clean", mode: 'copy'
     
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'nextgenusfs/funannotate:v1.8.15':
-        'https://depot.galaxyproject.org/singularity/funannotate:1.8.15--pyhdfd78af_2' }"
+        'nextgenusfs/funannotate:v1.8.17':
+        'https://depot.galaxyproject.org/singularity/funannotate:1.8.17--pyhdfd78af_5' }"
 
     input:
     tuple val(sample_id), path(fasta)
@@ -192,8 +187,8 @@ process FUNANNOTATE_ANNOTATE {
     publishDir "results/funannotate/${sample_id}/annotate", mode: 'copy'
     
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'nextgenusfs/funannotate:v1.8.15':
-        'https://depot.galaxyproject.org/singularity/funannotate:1.8.15--pyhdfd78af_2' }"
+        'nextgenusfs/funannotate:v1.8.17':
+        'https://depot.galaxyproject.org/singularity/funannotate:1.8.17--pyhdfd78af_5' }"
 
     input:
     tuple val(sample_id), path(annotated_output)
