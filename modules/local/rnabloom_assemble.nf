@@ -37,10 +37,9 @@ process RNABLOOM_ASSEMBLE {
     # find output
     fa_files=\$(find rnabloom_output -name "*.transcripts.nr.fa" -type f)
     if [ ! -z "\$fa_files" ]; then
-        transcript_files="\$transcript_files \$fa_files"
         echo "Found .fa files:" >> assembly_stats.txt
         echo "\$fa_files" >> assembly_stats.txt
-        cat \$transcript_files > concatenated_transcripts.fa
+        cat \$fa_files > concatenated_transcripts.fa
     fi
     
     cat <<-END_VERSIONS > versions.yml
