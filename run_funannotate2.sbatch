@@ -21,7 +21,7 @@ export MYSOFTWARE=/software/scratch/pawsey1142/kgagalova/
 #export GENEMARK_PATH=/scratch/y95/kgagalova/HGT/analysis-july/src/gmes_linux_64
 
 
-nextflow run ./main.nf -profile setonix\
+nextflow run ./main.nf -profile pawsey_setonix,singularity -resume \
   --reads manifest.tsv \
   --genomes '/scratch/pawsey1142/kgagalova/norin-cadenza/pathogen-genome/repeat-anno/results/pn143_final/final/*.fasta' \
   --database_dir '/scratch/pawsey1142/kgagalova/norin-cadenza/pathogen-genome/genome-anno/mp-annotate_pangenomes/funannotate_db_new/'
