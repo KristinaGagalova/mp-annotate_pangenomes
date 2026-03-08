@@ -9,7 +9,7 @@ workflow FUNANNOTATE_ANNOTATION {
     take:
     ch_cleaned_genomes  // channel: [meta, path(genome)]
     ch_transcripts      // channel: path(transcripts)
-    ch_database         // channel: path(database)
+    database            // val: database
 
     main:
     ch_versions = Channel.empty()
@@ -18,7 +18,7 @@ workflow FUNANNOTATE_ANNOTATION {
     FUNANNOTATE_PREDICT(
         ch_cleaned_genomes,
         ch_transcripts.first(),
-        ch_database
+        database
     )
     ch_versions = ch_versions.mix(FUNANNOTATE_PREDICT.out.versions)
 
@@ -27,7 +27,7 @@ workflow FUNANNOTATE_ANNOTATION {
         FUNANNOTATE_PREDICT.out.predict_results,
         FUNANNOTATE_PREDICT.out.genome,
         FUNANNOTATE_PREDICT.out.annotations,
-        ch_database
+        database
     )
     ch_versions = ch_versions.mix(FUNANNOTATE_ANNOTATE.out.versions)
 

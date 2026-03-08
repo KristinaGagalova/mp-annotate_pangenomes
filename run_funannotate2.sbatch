@@ -22,9 +22,9 @@ export MYSOFTWARE=/software/scratch/pawsey1142/kgagalova/
 
 
 nextflow run ./main.nf -profile pawsey_setonix,singularity -resume \
-  --reads manifest.tsv \
-  --genomes '/scratch/pawsey1142/kgagalova/norin-cadenza/pathogen-genome/repeat-anno/results/pn143_final/final/*.fasta'
-
+  --genomes '/scratch/pawsey1142/kgagalova/norin-cadenza/pathogen-genome/repeat-anno/results/pn143_final/final/*.fasta' \
+  --transcripts '/scratch/pawsey1142/kgagalova/norin-cadenza/pathogen-genome/genome-anno/assembled_transcripts/concatenated_deduplicated_transcripts.fa' \
+  --database_dir '/scratch/pawsey1142/kgagalova/norin-cadenza/pathogen-genome/genome-anno-braker/mp-annotate_pangenomes/funannotate_db/'
 
 #--database_dir '/scratch/pawsey1142/kgagalova/norin-cadenza/pathogen-genome/genome-anno/mp-annotate_pangenomes/funannotate_db_new/'
 #--genemark_dir /scratch/y95/kgagalova/HGT/analysis-july/src/gmes_linux_64 \

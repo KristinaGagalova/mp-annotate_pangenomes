@@ -37,8 +37,9 @@ workflow FUNANNOTATE {
     //
     // SUBWORKFLOW: Setup database
     //
-    ch_database_dir = params.database_dir ? Channel.fromPath(params.database_dir) : Channel.empty()
-    
+    // ch_database_dir = params.database_dir ? Channel.fromPath(params.database_dir) : Channel.empty()
+    ch_database_dir = params.database_dir ? Channel.value(file(params.database_dir).toRealPath().toString()) : Channel.empty()
+
     DATABASE_SETUP(
         ch_database_dir
     )
