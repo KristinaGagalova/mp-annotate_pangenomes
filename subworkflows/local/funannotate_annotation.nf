@@ -14,9 +14,15 @@ workflow FUNANNOTATE_ANNOTATION {
     main:
     ch_versions = Channel.empty()
 
+    // Derive the --name value: base name of the fasta without extension, suffixed with '_'
+    ch_predict_input = ch_cleaned_genomes.map { meta, genome ->
+        def base_name = genome.baseName + '_'
+        [meta, genome, base_name]
+    }
+
     // Gene prediction
     FUNANNOTATE_PREDICT(
-        ch_cleaned_genomes,
+        ch_predict_input,
         ch_transcripts.first(),
         database
     )

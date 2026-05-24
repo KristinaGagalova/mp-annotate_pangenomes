@@ -3,7 +3,7 @@ process FUNANNOTATE_SETUP_DB {
     label 'process_medium'
 
     output:
-    val("${task.workDir}/funannotate_db"), emit: database_dir
+    env DB_PATH,         emit: database
     path "versions.yml", emit: versions
 
     when:
@@ -12,13 +12,13 @@ process FUNANNOTATE_SETUP_DB {
     script:
     def args = task.ext.args ?: ''
     """
-    export FUNANNOTATE_DB=$PWD/funannotate_db
-    mkdir -p funannotate_db
+    export FUNANNOTATE_DB=/funannotate_db
+    DB_PATH=/funannotate_db
 
-    funannotate setup -w -d funannotate_db -i all --force ${args}
-    funannotate setup -w -d funannotate_db -b fungi --force
-    funannotate setup -w -d funannotate_db -b eukaryota --force
-    funannotate setup -w -d funannotate_db -b ascomycota --force
+    funannotate setup -w -d /funannotate_db -i all --force ${args}
+    funannotate setup -w -d /funannotate_db -b fungi --force
+    funannotate setup -w -d /funannotate_db -b eukaryota --force
+    funannotate setup -w -d /funannotate_db -b ascomycota --force
     funannotate database
 
     cat <<-END_VERSIONS > versions.yml
@@ -29,12 +29,12 @@ process FUNANNOTATE_SETUP_DB {
 
     stub:
     """
-    mkdir -p funannotate_db
-    touch funannotate_db/database_ready.txt
-
+    mkdir -p /funannotate_db
+    touch /funannotate_db/database_ready.txt
+    DB_PATH=/funannotate_db
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-      funannotate:
+      funannotate: stub
     END_VERSIONS
     """
 }

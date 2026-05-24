@@ -6,22 +6,20 @@ include { FUNANNOTATE_SETUP_DB } from '../../modules/local/funannotate_setup_db'
 
 workflow DATABASE_SETUP {
     take:
-    ch_database_dir
+    ch_database_dir  // val: pre-existing path string, or empty
 
     main:
     ch_versions = Channel.empty()
 
     if (params.database_dir) {
-        println "[INFO] Using existing database at: ${params.database_dir}"
-        ch_database = ch_database_dir
+        ch_database = Channel.value(params.database_dir)
     } else {
-        println "[INFO] Setting up new funannotate database..."
         FUNANNOTATE_SETUP_DB()
-        ch_database = FUNANNOTATE_SETUP_DB.out.database_dir
         ch_versions = ch_versions.mix(FUNANNOTATE_SETUP_DB.out.versions)
+        ch_database = FUNANNOTATE_SETUP_DB.out.database
     }
 
     emit:
     database = ch_database
-    versions  = ch_versions
+    versions = ch_versions
 }
