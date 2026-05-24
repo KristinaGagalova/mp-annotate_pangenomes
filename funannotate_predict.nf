@@ -20,8 +20,10 @@ process FUNANNOTATE_PREDICT {
     script:
     def args   = task.ext.args   ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
+    def genemark = params.genemark_path ? "export GENEMARK_PATH=${params.genemark_path}" : ""
     """
     export FUNANNOTATE_DB=${database}
+    ${genemark}
     funannotate database
 
     mkdir -p funannotate_output
